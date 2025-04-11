@@ -1,5 +1,5 @@
-@import "tailwindcss";
-
+@import 'tailwindcss';
+/* 
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,4 +23,21 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+} */
+
+body {
+  background-color: #f7f7fc;
+}
+
+.bounce {
+  animation: bounce 6s infinite;
+}
+
+@bounce {
+  0% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
 }
