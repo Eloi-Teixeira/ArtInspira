@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import Loading from './loading';
+import Loading from '../Helper/loading';
 import Design from './design';
 import { IIdeia } from '@/models/Ideia';
+import { generateIdeia } from '@/app/actions/generate-ideia';
 
 export default function Intro() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -14,14 +15,7 @@ export default function Intro() {
     setIsActive(true);
     setIsLoading(true);
     try {
-      const res = await fetch('/api/ideias', {
-        cache: 'no-store',
-        next: { revalidate: 0 },
-      });
-      if (!res.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const json = await res.json();
+      const json = await generateIdeia();
       if (json.success) {
         setIdeia(json.data);
       }
@@ -32,8 +26,6 @@ export default function Intro() {
       setIsLoading(false);
     }
   };
-
-
 
   return (
     <main className="flex flex-col items-center justify-center mt-20">

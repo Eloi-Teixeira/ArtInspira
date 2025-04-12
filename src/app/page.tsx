@@ -1,7 +1,7 @@
-import Benefits from '@/components/benefits';
+import Benefits from '@/components/Home/benefits';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
-import Intro from '@/components/intro';
+import Intro from '@/components/Home/intro';
 
 export default function Home() {
   return (

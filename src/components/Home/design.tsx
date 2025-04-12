@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import Loading from './loading';
+import Loading from '../Helper/loading';
 import React from 'react';
+import { generateIdeia } from '@/app/actions/generate-ideia';
 
 interface Props {
   loading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,14 +38,7 @@ export default function Design({ ideia, palette }: Props) {
   const handleGenerateIdeia = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/ideias', {
-        cache: 'no-store',
-        next: { revalidate: 0 },
-      });
-      if (!res.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const json = await res.json();
+      const json = await generateIdeia();
       if (json.success) {
         setNewIdeia(json.data.ideia);
         setNewPalette(json.data.palette);
@@ -103,7 +97,7 @@ export default function Design({ ideia, palette }: Props) {
           <h3 className="font-bold text-2xl text-[#f26d85] rounded flex flex-col gap-2.5 mb-2 after:w-full after:content-[''] after:block my-4 after:h-0.5 after:bg-[#4eccc4]">
             Paleta de Cores Sugerida
           </h3>
-          <div className=''>
+          <div className="">
             <p>{newPalette[paletteIndex].description}</p>
             <div className="flex flex-wrap text-[12px] max-h-44 overflow-x-hidden overflow-y-auto gap-3 bg-gray-100 p-2 py-3 *:py-5 *:px-2 *:rounded-lg *:font-mono *:cursor-pointer colors-container ">
               {newPalette[paletteIndex].colors.map((color, index) => (
