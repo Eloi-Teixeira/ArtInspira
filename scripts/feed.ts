@@ -2,7 +2,7 @@ import dbConnect from '../src/lib/dbConnect';
 import { Ideia } from '../src/models/Ideia';
 const fs = require('fs');
 
-async function seed() {
+async function feed() {
   await dbConnect();
 
   const data = JSON.parse(fs.readFileSync(`${__dirname}/data.json`, 'utf8'));
@@ -17,4 +17,4 @@ async function seed() {
   process.exit();
 }
 
-seed();
+feed();
