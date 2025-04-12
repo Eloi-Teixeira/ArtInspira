@@ -16,7 +16,6 @@ export default function Home() {
     <>
     <Header />
     <Intro />
-
     <Benefits />
     <Footer />
     </>
