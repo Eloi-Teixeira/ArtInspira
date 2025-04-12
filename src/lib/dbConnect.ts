@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-// Carrega as variáveis de ambiente
 dotenv.config({ path: '.env.local' });
 
 const MONGODB_URI = process.env.MONGODB_URI!;
@@ -16,7 +15,7 @@ interface MongooseCache {
   promise: Promise<typeof mongoose> | null;
 }
 
-let globalCache = global as typeof globalThis & { mongoose: MongooseCache };
+const globalCache = global as typeof globalThis & { mongoose: MongooseCache };
 
 if (!globalCache.mongoose) {
   globalCache.mongoose = { conn: null, promise: null };

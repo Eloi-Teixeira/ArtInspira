@@ -1,6 +1,4 @@
-// models/Ideia.ts
 import mongoose, { Schema, Document } from 'mongoose';
-import { unique } from 'next/dist/build/utils';
 
 interface IAuthor {
   name: string;
@@ -12,7 +10,7 @@ interface IPalette {
   colors: string[];
   description: string;
   sugestion: string;
-  author?: IAuthor;
+  author: IAuthor;
   file: string;
 }
 

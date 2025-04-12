@@ -6,11 +6,12 @@ import Design from './design';
 import { IIdeia } from '@/models/Ideia';
 
 export default function Intro() {
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isActive, setIsActive] = React.useState(false);
   const [ideia1, setIdeia] = React.useState<IIdeia | null>(null);
 
   const handleGenerateIdeia = async () => {
+    setIsActive(true);
     setIsLoading(true);
     try {
       const res = await fetch('/api/ideias', {
@@ -24,7 +25,6 @@ export default function Intro() {
       if (json.success) {
         setIdeia(json.data);
       }
-      setIsActive(true);
     } catch (error) {
       console.error(error);
       setIsActive(false);
@@ -33,30 +33,7 @@ export default function Intro() {
     }
   };
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }, [isActive, isLoading]);
 
-  const ideia = {
-    title: 'Mundo Submarino Futurista',
-    text: 'Uma civilização submarina que combina elementos orgânicos e tecnológicos. Criaturas bioluminescentes nadam entre ruínas de uma cidade antiga enquanto veículos futuristas de propulsão magnética passam ao redor. As estruturas arquitetônicas misturam corais vivos com vidro e metal em formas curvilíneas.',
-  };
-
-  const palette = {
-    colors: ['#ff6b6b', '#4eccc4', '#ffe76e', '#1a535c', '#5c4ff0'],
-    description:
-      'Esta paleta combina tons aquáticos profundos com toques de cores vibrantes para elementos bioluminescentes.',
-    sugestion:
-      'Use os tons de azul como base, o turquesa para áreas intermediárias, e os tons vibrantes para destaque e elementos luminosos.',
-    author: {
-      name: 'Adrian',
-      link: 'https://lospec.com/palette-list/submarine-futuristic',
-      source: 'Lospecs',
-    },
-    file: '',
-  };
 
   return (
     <main className="flex flex-col items-center justify-center mt-20">

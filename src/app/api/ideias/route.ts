@@ -26,7 +26,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    return NextResponse.json({ success: false, message: 'Erro interno' }, {
+    return NextResponse.json({ success: false, message: `Erro interno: ${error}` }, {
       status: 500,
       headers: {
         'Cache-Control': 'no-store',

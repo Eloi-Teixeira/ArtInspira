@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Loading from './loading';
 import React from 'react';
 
-
 interface Props {
   loading: React.Dispatch<React.SetStateAction<boolean>>;
   ideia:
@@ -18,7 +17,7 @@ interface Props {
         colors: string[];
         description: string;
         sugestion: string;
-        author?: {
+        author: {
           name: string;
           link: string;
           source: string;
@@ -29,13 +28,12 @@ interface Props {
 }
 
 export default function Design({ ideia, palette }: Props) {
-  if (!ideia || !palette) return <Loading />;
-
   const [paletteIndex, setPaletteIndex] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(false);
   const [newIdeia, setNewIdeia] = React.useState(ideia);
   const [newPalette, setNewPalette] = React.useState(palette);
 
+  if (!newPalette || !newIdeia) return <Loading />;
   const handleGenerateIdeia = async () => {
     setIsLoading(true);
     try {
@@ -46,10 +44,11 @@ export default function Design({ ideia, palette }: Props) {
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
-      const json = await res.json() 
+      const json = await res.json();
       if (json.success) {
         setNewIdeia(json.data.ideia);
         setNewPalette(json.data.palette);
+        setPaletteIndex(0);
       }
     } catch (error) {
       console.error(error);
@@ -63,8 +62,21 @@ export default function Design({ ideia, palette }: Props) {
     alert('Cor copiada para a área de transferência!');
   };
 
+  function getContrastingTextColor(hexColor: string): string {
+    const hex = hexColor.replace('#', '');
+
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    // Cálculo de luminância relativo (YIQ)
+    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+    return yiq >= 128 ? '#000000' : '#FFFFFF';
+  }
+
   return (
-    <section className="result flex flex-col gap-4 max-w-4xl mx-auto px-8 pt-8 pb-12 bg-white rounded-2xl my-8 shadow-xl h-fit overflow-hidden relative">
+    <section className="result flex flex-col gap-4 max-w-4xl mx-auto px-8 pt-8 pb-12 bg-white rounded-2xl my-8 shadow-xl h-fit overflow-hidden relative selection:bg-gray-300 selection:text-gray-800">
       <h2 className="col-span-2 text-center text-3xl font-bold text-[#5c4ff0]">
         Sua Inspiração Está Pronta!
       </h2>
@@ -80,7 +92,10 @@ export default function Design({ ideia, palette }: Props) {
           <div className="w-full flex items-center justify-center h-72 bg-gray-200 text-gray-700 rounded-lg">
             Anúncio in-content
           </div>
-          <button className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300 mt-4" onClick={handleGenerateIdeia}>
+          <button
+            className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300 mt-4"
+            onClick={handleGenerateIdeia}
+          >
             Proxima Ideia
           </button>
         </div>
@@ -88,12 +103,15 @@ export default function Design({ ideia, palette }: Props) {
           <h3 className="font-bold text-2xl text-[#f26d85] rounded flex flex-col gap-2.5 mb-2 after:w-full after:content-[''] after:block my-4 after:h-0.5 after:bg-[#4eccc4]">
             Paleta de Cores Sugerida
           </h3>
-          <div>
+          <div className=''>
             <p>{newPalette[paletteIndex].description}</p>
-            <div className="flex flex-wrap text-[12px] max-h-44 overflow-x-hidden overflow-y-auto *:text-white *:text-shadow *:text-shadow-black gap-2 py-3 *:py-5 *:px-2 *:rounded-lg *:font-mono *:cursor-pointer">
+            <div className="flex flex-wrap text-[12px] max-h-44 overflow-x-hidden overflow-y-auto gap-3 bg-gray-100 p-2 py-3 *:py-5 *:px-2 *:rounded-lg *:font-mono *:cursor-pointer colors-container ">
               {newPalette[paletteIndex].colors.map((color, index) => (
                 <div
-                  style={{ backgroundColor: color }}
+                  style={{
+                    backgroundColor: color,
+                    color: getContrastingTextColor(color),
+                  }}
                   key={index + color}
                   onClick={handleCopy}
                 >
@@ -105,7 +123,11 @@ export default function Design({ ideia, palette }: Props) {
               <span>
                 Autor:
                 <Link
-                  href={newPalette[paletteIndex].author?.link ? newPalette[paletteIndex].author?.link : ''}
+                  href={
+                    newPalette[paletteIndex].author?.link
+                      ? newPalette[paletteIndex].author?.link
+                      : ''
+                  }
                   className="hover:bg-[#4a3fd1] hover:text-white duration-300 w-fit px-4 rounded"
                 >
                   {newPalette[paletteIndex].author?.name}
@@ -114,27 +136,45 @@ export default function Design({ ideia, palette }: Props) {
               <span>
                 Fonte:
                 <Link
-                  href={newPalette[paletteIndex].author?.link ? newPalette[paletteIndex].author?.link : ''}
+                  href={
+                    newPalette[paletteIndex].author?.link
+                      ? newPalette[paletteIndex].author?.link
+                      : ''
+                  }
                   className="text-[#5c4ff0] hover:bg-[#4a3fd1] hover:text-white duration-300 w-fit px-4 rounded"
                 >
                   {newPalette[paletteIndex].author?.source}
                 </Link>
               </span>
             </div>
-            <p><span className='font-bold text-[#5c4ff0]'>Sugestão: </span>{newPalette[paletteIndex].sugestion}</p>
+            <p>
+              <span className="font-bold text-[#5c4ff0]">Sugestão: </span>
+              {newPalette[paletteIndex].sugestion}
+            </p>
           </div>
-          <button className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300 mt-4" onClick={() => setPaletteIndex((prev) => {
-            if (prev === palette.length - 1) return 0;
-            return prev + 1;
-          })}>
+          <button
+            className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300 mt-4"
+            onClick={() =>
+              setPaletteIndex((prev) => {
+                if (prev === newPalette.length - 1) return 0;
+                console.log(prev, '/', newPalette.length - 1);
+                return prev + 1;
+              })
+            }
+          >
             Nova Paleta
           </button>
-          <button className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300 mt-4 ml-3">
+          <Link
+            href={newPalette[paletteIndex].author.link}
+            className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300 mt-4 ml-3"
+          >
             Baixar Paleta
-          </button>
+          </Link>
         </div>
       </div>
-      {isLoading && <Loading classname='absolute top-0 left-0 w-full h-full bg-white bg-opacity-70 z-50' />}
+      {isLoading && (
+        <Loading classname="absolute top-0 left-0 w-full h-full bg-white bg-opacity-70 z-50" />
+      )}
     </section>
   );
 }
