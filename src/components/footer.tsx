@@ -40,7 +40,7 @@ export default async function Footer() {
               </li>
               <li>
                 Portifólio:{' '}
-                <Link href={''} className="text-[#9aeaed]">
+                <Link href={''} className="text-[#9aeaed]" target="_blank">
                   Clique aqui
                 </Link>
               </li>
