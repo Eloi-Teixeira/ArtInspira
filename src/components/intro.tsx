@@ -3,6 +3,7 @@
 import React from 'react';
 import Benefits from './benefits';
 import Loading from './loading';
+import Design from './design';
 
 export default function Intro() {
   const [loading, setLoading] = React.useState(true);
