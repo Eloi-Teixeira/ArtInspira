@@ -5,22 +5,26 @@ import Loading from '../Helper/loading';
 import Design from './design';
 import { IIdeia } from '@/models/Ideia';
 import { generateIdeia } from '@/app/actions/generate-ideia';
+import MessageError from '../Helper/message-error';
 
 export default function Intro() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isActive, setIsActive] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const [ideia1, setIdeia] = React.useState<IIdeia | null>(null);
 
   const handleGenerateIdeia = async () => {
     setIsActive(true);
     setIsLoading(true);
+    setError(false);
+
     try {
       const json = await generateIdeia();
-      if (json.success) {
-        setIdeia(json.data);
-      }
+      if (!json.success) throw new Error('Erro ao gerar ideia');
+      setIdeia(json.data);
     } catch (error) {
       console.error(error);
+      setError(true);
       setIsActive(false);
     } finally {
       setIsLoading(false);
@@ -63,6 +67,7 @@ export default function Intro() {
           />
         )
       ) : null}
+      {error && <MessageError />}
     </main>
   );
 }
