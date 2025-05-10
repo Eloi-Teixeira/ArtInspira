@@ -15,7 +15,6 @@ interface IPalette {
 }
 
 export interface IIdeia extends Document {
-  
   ideia: {
     title: string;
     text: string;

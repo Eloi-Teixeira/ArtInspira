@@ -1,5 +1,4 @@
 'use server';
-
 import { IIdeia } from '@/models/Ideia';
 
 interface ResponseIdea {
@@ -10,6 +9,7 @@ interface ResponseIdea {
 
 export async function generateIdeia() {
   const res = await fetch('http://localhost:3000/api/ideias', {
+    method: 'GET',
     cache: 'no-store',
     next: { revalidate: 0 },
     headers: {

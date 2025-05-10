@@ -70,16 +70,16 @@ export default function Design({ ideia, palette }: Props) {
   }
 
   return (
-    <section className="result flex flex-col gap-4 max-w-4xl mx-auto px-8 pt-8 pb-12 bg-white rounded-2xl my-8 shadow-xl h-fit overflow-hidden relative">
-      <h2 className="col-span-2 text-center text-3xl font-bold text-[#5c4ff0]">
+    <section className="result flex flex-col gap-4 max-w-4xl max-lg:max-w-2xl mx-auto px-8 pt-8 pb-12 bg-white rounded-2xl my-8 shadow-xl h-fit overflow-hidden relative">
+      <h2 className="col-span-2 text-center text-3xl max-md:text-3xl font-bold text-[#5c4ff0] capitalize">
         Sua Inspiração Está Pronta!
       </h2>
-      <div className="grid grid-cols-2 gap-x-8">
+      <div className="grid grid-cols-2 max-sm:grid-cols-1 gap-8">
         <div className="flex flex-col gap-4 delay-500">
-          <h3 className="font-bold text-2xl text-[#f26d85] rounded flex flex-col gap-2.5 mb-2 after:w-full after:content-[''] after:block my-4 after:h-0.5 after:bg-[#4eccc4]">
+          <h3 className="font-bold text-2xl max-md:text-xl text-[#f26d85] rounded flex flex-col gap-2.5 mb-2 after:w-full after:content-[''] after:block my-4 after:h-0.5 after:bg-[#4eccc4]">
             Ideia para Desenho
           </h3>
-          <div className="bg-[#fafafa] p-4 rounded-2xl">
+          <div className="bg-[#fafafa] p-4 rounded-2xl text-sm">
             <h4 className="text-lg font-bold mb-3">{newIdeia.title}</h4>
             <p>{newIdeia.text}</p>
           </div>
@@ -94,8 +94,8 @@ export default function Design({ ideia, palette }: Props) {
             Proxima Ideia
           </button>
         </div>
-        <div className="flexx flex-col gap-4 delay-300">
-          <h3 className="font-bold text-2xl text-[#f26d85] rounded flex flex-col gap-2.5 mb-2 after:w-full after:content-[''] after:block my-4 after:h-0.5 after:bg-[#4eccc4]">
+        <div className="gap-4 delay-300">
+          <h3 className="font-bold text-2xl max-md:text-xl text-[#f26d85] rounded flex flex-col gap-2.5 mb-2 after:w-full after:content-[''] after:block my-4 after:h-0.5 after:bg-[#4eccc4]">
             Paleta de Cores Sugerida
           </h3>
           <div className="">
@@ -146,31 +146,33 @@ export default function Design({ ideia, palette }: Props) {
                 </Link>
               </span>
             </div>
-            <p>
+            <p className="max-md:text-sm">
               <span className="font-bold text-[#5c4ff0]">Sugestão: </span>
               {newPalette[paletteIndex].sugestion}
             </p>
           </div>
-          <button
-            className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300 mt-4"
-            onClick={() =>
-              setPaletteIndex((prev) => {
-                if (prev === newPalette.length - 1) return 0;
-                console.log(prev, '/', newPalette.length - 1);
-                return prev + 1;
-              })
-            }
-            disabled={isLoading}
-          >
-            Nova Paleta
-          </button>
-          <Link
-            href={newPalette[paletteIndex].author.link}
-            target="_blank"
-            className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300 mt-4 ml-3"
-          >
-            Baixar Paleta
-          </Link>
+          <div className="flex flex-wrap gap-4 mt-4">
+            <button
+              className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300"
+              onClick={() =>
+                setPaletteIndex((prev) => {
+                  if (prev === newPalette.length - 1) return 0;
+                  console.log(prev, '/', newPalette.length - 1);
+                  return prev + 1;
+                })
+              }
+              disabled={isLoading}
+            >
+              Nova Paleta
+            </button>
+            <Link
+              href={newPalette[paletteIndex].author.link}
+              target="_blank"
+              className="py-3 px-6 bg-[#5c4ff0] max-w-fit rounded-full text-white hover:bg-[#4a3fd1] cursor-pointer duration-300"
+            >
+              Baixe no Site
+            </Link>
+          </div>
         </div>
       </div>
       {isLoading && (

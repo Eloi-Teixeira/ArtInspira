@@ -1,26 +1,26 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
-import { Ideia } from '@/models/Ideia';
-import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
+import { Ideia, IIdeia } from '@/models/Ideia';
+// import { Ratelimit } from '@upstash/ratelimit';
+// import { Redis } from '@upstash/redis';
 
 // Conecta com o Redis da Upstash
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+// const redis = new Redis({
+//   url: process.env.UPSTASH_REDIS_REST_URL!,
+//   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+// });
 
 // Limite: 10 requisições por IP a cada 60s
-const ratelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.fixedWindow(10, '60 s'),
-  analytics: true,
-});
+// const ratelimit = new Ratelimit({
+//   redis,
+//   limiter: Ratelimit.fixedWindow(10, '60 s'),
+//   analytics: true,
+// });
 
 export async function GET(req: Request) {
   const apiKey = req.headers.get('x-api-key');
   const ip = req.headers.get('x-forwarded-for') || 'unknown';
-  const { success } = await ratelimit.limit(ip);
+  // const { success } = await ratelimit.limit(ip);
 
   if (apiKey !== process.env.API_SECRET_KEY) {
     return NextResponse.json(
@@ -29,12 +29,12 @@ export async function GET(req: Request) {
     );
   }
 
-  if (!success) {
-    return NextResponse.json(
-      { success: false, message: 'Muitas requisições' },
-      { status: 429 },
-    );
-  }
+  // if (!success) {
+  //   return NextResponse.json(
+  //     { success: false, message: 'Muitas requisições' },
+  //     { status: 429 },
+  //   );
+  // }
 
   await dbConnect();
 
@@ -65,6 +65,7 @@ export async function GET(req: Request) {
       },
     );
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { success: false, message: `Erro interno: ${error}` },
       {

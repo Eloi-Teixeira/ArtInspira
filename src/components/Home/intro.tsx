@@ -33,10 +33,10 @@ export default function Intro() {
 
   return (
     <main className="flex flex-col items-center justify-center mt-20">
-      <h1 className="text-[42px] text-[#5c4ff0] font-bold mt-32">
+      <h1 className="text-[42px] text-[#5c4ff0] text-center font-bold mt-32">
         Desperte Sua Inspiração Artística
       </h1>
-      <p className="text-[#3b313b] max-w-[800px] text-center mt-6 text-xl leading-8">
+      <p className="text-[#3b313b] max-w-[800px] text-center mt-6 text-xl leading-8 max-md:text-lg max-md:mx-6">
         ArtInspira te ajuda a encontrar novas ideias de desenhos e combinações
         de cores perfeitas para impulsionar sua criatividade. Nossa ferramenta
         inteligente gera conceitos únicos para você nunca mais ficar sem
@@ -49,7 +49,7 @@ export default function Intro() {
       >
         Gerar ideia
       </button>
-      <div className="flex gap-4">
+      <div className="flex gap-4 *:max-sm:hidden">
         <div className="bg-[#ff6b6b] w-20 h-20 rounded-full shadow-md"></div>
         <div className="bg-[#4eccc4] w-20 h-20 rounded-full shadow-md"></div>
         <div className="bg-[#ffe76e] w-20 h-20 rounded-full shadow-md"></div>
